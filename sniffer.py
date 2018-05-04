@@ -3,6 +3,8 @@
 
 import socket
 
+from src.system.ethernet import EthernetFrame
+
 
 def main():
     s = socket.socket(
@@ -12,10 +14,15 @@ def main():
     )
     s.bind(('enp0s3', 3))
 
+    counter = 0
     while True:
+        counter += 1
         try:
             message = s.recv(1024)
-            print(repr(message))
+            ethernet_frame = EthernetFrame(message)
+            print('{:0>5d} - DSTADD: {}'.format(counter, ethernet_frame.destination_address))
+            print('{:0>5d} - SRCADD: {}'.format(counter, ethernet_frame.source_address))
+            print('{:0>5d} - ETHTYP: {}'.format(counter, ethernet_frame.ethertype))
         except KeyboardInterrupt:
             print('Sniffer stopped')
             break
