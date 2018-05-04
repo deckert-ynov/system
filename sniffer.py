@@ -13,8 +13,12 @@ def main():
     s.bind(('enp0s3', 3))
 
     while True:
-        message = s.recv(1024)
-        print(repr(message))
+        try:
+            message = s.recv(1024)
+            print(repr(message))
+        except KeyboardInterrupt:
+            print('Sniffer stopped')
+            break
 
 
 if __name__ == '__main__':
